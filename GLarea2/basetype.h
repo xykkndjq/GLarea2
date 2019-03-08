@@ -13,7 +13,7 @@ namespace orth
 {
 	typedef Point3f Vectorf;
 	typedef Point3d Vectord;
-	typedef Point3f Normal;
+	typedef Point3d Normal;
 	typedef Point3ui face;
 	typedef Point3uc color;
 	typedef double curvature;

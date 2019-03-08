@@ -96,9 +96,10 @@ void GLWidget::setWindowSize(QSize &size)
 
 void GLWidget::rotateBy(int xAngle, int yAngle, int zAngle)
 {
-    xRot += xAngle;
-    yRot += yAngle;
-    zRot += zAngle;
+    xRot = xAngle;
+    yRot = yAngle;
+    zRot = zAngle;
+	std::cout << xRot <<" -- " << yRot<< std::endl;
     update();
 }
 
@@ -157,7 +158,7 @@ void GLWidget::initializeGL()
 {
     initializeOpenGLFunctions();
 	//createGeometry();
-    makeObject();
+    
 
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE);
@@ -184,6 +185,7 @@ void GLWidget::initializeGL()
 
 void GLWidget::paintGL()
 {
+	makeObject();
     glClearColor(clearColor.redF(), clearColor.greenF(), clearColor.blueF(), clearColor.alphaF());
 	//cout << clearColor.redF() << " ;" << clearColor.greenF() << " ;" << clearColor.blueF() << " ;" << endl;
 	//glClearColor()
@@ -221,12 +223,13 @@ void GLWidget::paintGL()
 	//cout << endl;
 
 	model.setToIdentity();
-	model.rotate(xRot / 16.0f, 1.0f, 0.0f, 0.0f);
-	model.rotate(yRot / 16.0f, 0.0f, 1.0f, 0.0f);
-	model.rotate(zRot / 16.0f, 0.0f, 0.0f, 1.0f);
-	//model.translate(xRot, yRot, zRot);
+	//model.rotate(xRot / 16.0f, 1.0f, 0.0f, 0.0f);
+	//model.rotate(yRot / 16.0f, 0.0f, 1.0f, 0.0f);
+	//model.rotate(zRot / 16.0f, 0.0f, 0.0f, 1.0f);
+	//model.translate(xRot*0.01, yRot*0.01, zRot*0.01);
 	program->setUniformValue("model", model);
 	program->setUniformValue("inv_model", model.inverted());
+	program->setUniformValue("screenPos", QVector3D(xRot / 1920.0f, yRot / 1080.0f, zRot));
 	//cout << model.data()[0] << ", " << model.data()[4] << ", " << model.data()[8] << ", " << model.data()[12] << endl;
 	//cout << model.data()[1] << ", " << model.data()[5] << ", " << model.data()[9] << ", " << model.data()[13] << endl;
 	//cout << model.data()[2] << ", " << model.data()[6] << ", " << model.data()[10] << ", " << model.data()[14] << endl;
@@ -369,7 +372,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent *event)
 	//}
 
     if (event->buttons() & Qt::LeftButton) {
-		rotateBy(8 * dy, 0, 8 * dx);
+		rotateBy(dx, dy, 0);
     } else if (event->buttons() & Qt::RightButton) {
         rotateBy(8 * dy, 8 * dx, 0);
     }

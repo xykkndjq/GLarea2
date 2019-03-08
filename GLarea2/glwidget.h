@@ -105,9 +105,9 @@ private:
 
     QColor clearColor;
     QPoint lastPos;
-    int xRot;
-    int yRot;
-    int zRot;
+    float xRot;
+	float yRot;
+	float zRot;
 
 	//QOpenGLTexture *textures;
     QOpenGLShaderProgram *program;
