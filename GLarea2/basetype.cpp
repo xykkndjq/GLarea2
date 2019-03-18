@@ -30,6 +30,29 @@ namespace orth
 		size_ = s;
 	}
 
+
+	void MeshModel::NormalUpdate()
+	{
+		N.resize(P.size());
+		PointNormal face_normal(F.size());
+		for (unsigned int i = 0; i < F.size(); i++)
+		{
+			face_normal[i] = TriangleNormal(P[F[i].x], P[F[i].y], P[F[i].z]);
+		}
+		vector<int> point_face_number(P.size());
+		for (unsigned int i = 0; i < F.size(); i++)
+		{
+			N[F[i].x] += face_normal[i]; point_face_number[F[i].x]++;
+			N[F[i].y] += face_normal[i]; point_face_number[F[i].y]++;
+			N[F[i].z] += face_normal[i]; point_face_number[F[i].z]++;
+		}
+		for (unsigned int i = 0; i <P.size(); i++)
+		{
+			N[i] /= (float)point_face_number[i];
+		}
+	}
+
+
 	//void MeshModel::DateDownload(Eigen::MatrixXd &Verts, Eigen::MatrixXi &Faces)
 	//{
 	//	if (P.size()==0)

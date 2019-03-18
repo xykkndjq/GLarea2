@@ -58,9 +58,17 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include "io.h"
+#include <orthio.h>
+#include <QDebug>
+#include <3DScan.h>
+#include "VTK_render.h"
+
 using std::cout;
 using std::endl;
+
+#define PROGRAM_VERTEX_ATTRIBUTE 0
+#define PROGRAM_NORMAL_ATTRIBUTE 1
+#define PROGRAM_MATERIAL_ATTRIBUTE 2
 
 QT_FORWARD_DECLARE_CLASS(QOpenGLShaderProgram);
 QT_FORWARD_DECLARE_CLASS(QOpenGLTexture)
@@ -76,6 +84,7 @@ public:
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
     void rotateBy(int xAngle, int yAngle, int zAngle);
+	void translateBy(int xAngle, int yAngle, int zAngle);
     void setClearColor(const QColor &color);
 	void GLWidget::setWindowSize(QSize &size);
 
@@ -108,6 +117,12 @@ private:
     float xRot;
 	float yRot;
 	float zRot;
+	float xTrans;
+	float yTrans;
+	float zTrans;
+
+	scan::RasterScan rs;
+	cv::Mat model1, view1, project1;
 
 	//QOpenGLTexture *textures;
     QOpenGLShaderProgram *program;
@@ -116,6 +131,7 @@ private:
 	vector<float> vertices_in;
 	vector<float> normal_in;
 	vector<float> label_in;
+	QVector<GLfloat> vertData;
 	QVector<QVector3D> m_vertices;
 	QVector<QVector3D> m_normals;
 	float fv[4];
